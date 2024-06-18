@@ -253,9 +253,19 @@ const products = [
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Endpoint to retrieve all products
-app.get('/api/products', (req, res) => {
+// Endpoint to retrieve all local products
+app.get('/api/local-products', (req, res) => {
   res.json(products);
+});
+
+// Proxy endpoint to fetch products from external API
+app.get('/api/products', async (req, res) => {
+  try {
+    const response = await axios.get('https://free-ecommerce-api.vercel.app/api/products');
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching products' });
+  }
 });
 
 // Endpoint to retrieve a product by ID
@@ -285,5 +295,5 @@ app.get('/api/products/search/:title', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });

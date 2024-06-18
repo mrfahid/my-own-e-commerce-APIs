@@ -4,7 +4,11 @@ const app = express();
 const port = 3000;
 
 // Use the cors middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // Allows all origins
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization'
+}));
 
 const products = [
   {

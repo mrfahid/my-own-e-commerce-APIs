@@ -3,12 +3,11 @@ const cors = require('cors'); // Import the cors package
 const app = express();
 const port = 3000;
 
+var corsOptions = {
+  origin: "https://literate-space-lamp-qw5xp9px7v6fx65v-5173.app.github.dev"
+};
 // Use the cors middleware
-app.use(cors({
-  origin: '*', // Allows all origins
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization'
-}));
+app.use(cors(corsOptions));
 
 const products = [
   {

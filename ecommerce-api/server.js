@@ -262,17 +262,21 @@ app.get('/api/local-products', (req, res) => {
   res.json(products);
 });
 
-// Proxy endpoint to fetch products from external API
+// Proxy endpoint to fetch external API products with CORS headers
 app.get('/api/products', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
   try {
     const response = await axios.get('https://free-ecommerce-api.vercel.app/api/products');
     res.json(response.data);
   } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ message: 'Error fetching products' });
   }
 });
 
-// Endpoint to retrieve a product by ID
 app.get('/api/products/:id', (req, res) => {
   const productId = parseInt(req.params.id, 10);
   const product = products.find(p => p.id === productId);
@@ -283,21 +287,18 @@ app.get('/api/products/:id', (req, res) => {
   }
 });
 
-// Endpoint to filter products by category
 app.get('/api/products/category/:category', (req, res) => {
   const category = req.params.category.toLowerCase();
   const filteredProducts = products.filter(p => p.category.toLowerCase() === category);
   res.json(filteredProducts);
 });
 
-// Endpoint to search products by title
 app.get('/api/products/search/:title', (req, res) => {
   const title = req.params.title.toLowerCase();
   const searchedProducts = products.filter(p => p.title.toLowerCase().includes(title));
   res.json(searchedProducts);
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
